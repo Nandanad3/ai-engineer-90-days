@@ -1,0 +1,6 @@
+name=input("Enter Your Name:")
+age=int(input("Enter your Age:"))
+course=input("Enter your course:")
+print("Name:"+name)
+print("Age:",age)
+print("Course:"+course)

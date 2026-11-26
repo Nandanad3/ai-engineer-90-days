@@ -1,0 +1,11 @@
+name=input("Enter Your Name:")
+age=int(input("Enter your Age:"))
+course=input("Enter your course:")
+college=input("Enter your college name:")
+
+print("====Personal Profile====")
+print("Name:"+name)
+print("Age:",age)
+print("Course:"+course)
+print("College:"+college)
+print("=========================================")
