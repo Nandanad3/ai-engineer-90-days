@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
 
 
 class Topic(BaseModel):
@@ -15,3 +15,18 @@ class TopicResponse(BaseModel):
     completed: bool
 
     model_config = ConfigDict(from_attributes=True)
+class UserCreate(BaseModel):
+    username: str = Field(min_length=3, max_length=30)
+    email: EmailStr
+    password: str = Field(min_length=8)
+
+
+class UserResponse(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+
+    model_config = ConfigDict(from_attributes=True)
+class UserLogin(BaseModel):
+    username: str
+    password: str

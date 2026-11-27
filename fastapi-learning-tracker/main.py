@@ -1,21 +1,21 @@
 
 from fastapi import FastAPI
-
+import auth
 import models
+from config import settings
 from database import engine
 from routers import topics
 
 app = FastAPI(
-    title="AI Engineer Learning Tracker",
-    description="API to manage and track AI Engineer learning progress",
-    version="1.0.0"
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
+    description="API to manage and track AI Engineer learning progress"
 )
 
-# Create database tables
 models.Base.metadata.create_all(bind=engine)
 
-# Register topic routes
 app.include_router(topics.router)
+app.include_router(auth.router)
 
 
 @app.get("/")

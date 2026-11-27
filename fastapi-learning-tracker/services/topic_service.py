@@ -4,12 +4,13 @@ from sqlalchemy.orm import Session
 
 
 # Create a topic
-def create_topic(db: Session, topic):
+def create_topic(db: Session, topic,user_id: int):
 
     new_topic = models.TopicModel(
         title=topic.title,
         day=topic.day,
-        completed=topic.completed
+        completed=topic.completed,
+        user_id=user_id
     )
 
     db.add(new_topic)
@@ -20,16 +21,16 @@ def create_topic(db: Session, topic):
 
 
 # Get all topics
-def get_all_topics(db: Session):
-
-    return db.query(models.TopicModel).all()
-
+def get_all_topics(db: Session, user_id: int):
+    return db.query(models.TopicModel).filter(
+        models.TopicModel.user_id == user_id
+    ).all()
 
 # Get topic by ID
-def get_topic_by_id(db: Session, topic_id: int):
-
+def get_topic_by_id(db: Session, topic_id: int, user_id: int):
     return db.query(models.TopicModel).filter(
-        models.TopicModel.id == topic_id
+        models.TopicModel.id == topic_id,
+        models.TopicModel.user_id == user_id
     ).first()
 
 
@@ -41,20 +42,19 @@ def delete_topic(db: Session, topic):
 
     return True
 
-def get_progress(db: Session):
-
-    total = db.query(models.TopicModel).count()
+def get_progress(db: Session, user_id: int):
+    total = db.query(models.TopicModel).filter(
+        models.TopicModel.user_id == user_id
+    ).count()
 
     completed = db.query(models.TopicModel).filter(
+        models.TopicModel.user_id == user_id,
         models.TopicModel.completed == True
     ).count()
 
     pending = total - completed
 
-    if total == 0:
-        percentage = 0
-    else:
-        percentage = round((completed / total) * 100, 2)
+    percentage = round((completed / total) * 100, 2) if total else 0
 
     return {
         "total_topics": total,
